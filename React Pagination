@@ -1,0 +1,85 @@
+import { useEffect, useState } from "react";
+import "./styles.css";
+
+const Card = ({ title, img }) => {
+  return (
+    <div
+      style={{
+        width: "30%",
+        margin: "2px",
+        borderRadius: "22px",
+        border: "1px solid black",
+      }}
+    >
+      <p>{title}</p>
+      <img height={120} width={120} src={img} alt="" srcset="" />
+    </div>
+  );
+};
+
+export default function App() {
+  const [paginationData, setPaginationData] = useState([]);
+  const dataPerPage = 10;
+
+  const api_url = "https://dummyjson.com/products?limit=190";
+  const getData = async () => {
+    const res = await fetch(api_url);
+    const data = await res.json();
+    setPaginationData(data.products);
+    console.log(data.total);
+  };
+
+  const [pageN, setPageN] = useState(0);
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const PAGE_SIZE = paginationData.length;
+  const arraySize = Math.ceil(PAGE_SIZE / dataPerPage);
+
+  return !paginationData.length ? (
+    <h1>Nothing to show here</h1>
+  ) : (
+    <div className="App">
+      <h1>React pagination</h1>
+      {[...Array(10).keys()].map((n) => (
+        <span
+          style={{
+            border: "2px solid black",
+            margin: "5px",
+            backgroundColor: pageN == n ? "cyan" : "white",
+            padding: "2px",
+            fontSize: "25px",
+            cursor: "pointer",
+          }}
+          onClick={() => {
+            setPageN(n);
+            console.log(n);
+          }}
+          key={n}
+        >
+          {n}
+        </span>
+      ))}
+      <div
+        style={{
+          marginTop: "32px",
+          display: "flex",
+          flexWrap: "wrap",
+          overflowX: "hidden",
+          justifyContent: "space-between",
+        }}
+      >
+        {paginationData?.slice(pageN * 10, pageN * 10 + 10)?.map((item) => {
+          return (
+            <>
+              <Card title={item.title} img={item.thumbnail} />
+            </>
+          );
+        })}
+        ;
+      </div>
+    </div>
+  );
+}
