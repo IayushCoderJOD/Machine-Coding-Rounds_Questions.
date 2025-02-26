@@ -1,0 +1,70 @@
+import { useEffect, useRef, useState } from "react";
+import "./styles.css";
+
+export default function App() {
+  const [inputVal, setinputVal] = useState("");
+  const [data, setData] = useState([]);
+  const [show, setShow] = useState(false);
+
+  const getData = async () => {
+    console.log(inputVal);
+    const api = await fetch(
+      `https://dummyjson.com/recipes/search?q=${inputVal}`
+    );
+    const res = await api.json();
+    setData(res.recipes);
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      getData();
+    }, 500);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [inputVal]);
+
+  // const debounceSearch = debounce(getData);
+  return (
+    <div className="App">
+      <h1>Auto complete searchbar</h1>
+      <input
+        style={{
+          width: "50vw",
+          height: "5vh",
+          fontSize: "22px",
+        }}
+        onFocus={() => setShow(true)}
+        onBlur={() => setShow(false)}
+        onChange={(e) => setinputVal(e.target.value)}
+        value={inputVal}
+        type="text"
+        placeholder="Search any recipe"
+      />
+      <div
+        style={{
+          border: "1px solid black",
+          width: "50vw",
+          fontSize: "7px",
+          position: "relative",
+          justifyContent: "center",
+          left: "153px",
+        }}
+      >
+        {show &&
+          data?.map((d) => {
+            return (
+              <div
+                style={{
+                  width: "40vw",
+                }}
+              >
+                <h1>{d.name}</h1>
+              </div>
+            );
+          })}
+      </div>
+    </div>
+  );
+}
