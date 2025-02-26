@@ -1,0 +1,50 @@
+import { useRef } from "react";
+import "./styles.css";
+
+export default function App() {
+  const emailValue = useRef();
+  const passValue = useRef();
+  const handleSubmit = () => {
+    if (!emailValue.current.value) {
+      alert("enter email correctly");
+    } else if (!passValue.current.value) {
+      alert("enter password correctly");
+    } else {
+      alert(
+        "Email: " +
+          emailValue.current.value +
+          "   " +
+          "Password: " +
+          passValue.current.value
+      );
+      emailValue.current.value = "";
+      passValue.current.value = "";
+    }
+  };
+  return (
+    <div className="App">
+      <h1>Hello user</h1>
+      <label htmlFor="Email">Email: </label>
+      <input
+        ref={emailValue}
+        type="email"
+        name="email"
+        placeholder="write your email"
+      />
+      <br />
+      <br />
+      <label htmlFor="Email">Password: </label>
+      <input
+        ref={passValue}
+        type="password"
+        name="password"
+        placeholder="write your password"
+      />
+      <br />
+      <br />
+      <button onClick={handleSubmit} type="submit">
+        Submit
+      </button>
+    </div>
+  );
+}
