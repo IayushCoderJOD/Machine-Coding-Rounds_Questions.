@@ -1,0 +1,52 @@
+import { useEffect, useState } from "react";
+import "./styles.css";
+
+export default function App() {
+  const color = ["red", "yellow", "green"];
+  const timerArray = [5000, 3000, 9000];
+  const [colorValue, setColorValue] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setColorValue((prev) => (prev + 1) % color.length);
+      console.log(colorValue);
+    }, timerArray[colorValue]);
+
+    return () => clearInterval(timer);
+  }, [colorValue]);
+
+  return (
+    <div className="App">
+      <div
+        style={{
+          border: "2px solid black",
+          width: "20vw",
+          height: "50vw",
+          backgroundColor:"black",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "12px",
+        }}
+      >
+        {color.map((data, id) => {
+          return (
+            <>
+              <div
+                key={id}
+                style={{
+                  height: "82px",
+                  width: "82px",
+                  border: "1px solid black",
+                  borderRadius: "50%",
+                  backgroundColor: id === colorValue ? data : "white",
+                }}
+              ></div>
+            </>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
