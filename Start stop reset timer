@@ -1,0 +1,32 @@
+import {useState} from 'react';
+import "./styles.css";
+
+
+export default function App() {
+  const [timer,setTimer]=useState(0);
+  const [storeInterval, setStoreInterval]=useState(null);
+
+  const start=()=>{
+    setStoreInterval(setInterval(()=>{
+      setTimer((timer)=>timer+1);
+    },100))
+  }
+  const stop=()=>{
+    clearInterval(storeInterval);
+  }
+  const reset=()=>{
+    clearInterval(storeInterval);
+    setTimer(0);
+  }
+
+  return (
+    <div className="App">
+      <h1>Hello - {timer}</h1>
+      <div>
+        <button onClick={start}> start </button>
+        <button onClick={stop}> stop </button>
+        <button onClick={reset}> reset </button>
+      </div>
+    </div>
+  );
+}
